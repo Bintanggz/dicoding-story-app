@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dicoding Story App - Bagikan cerita dan momen menarik Anda ke seluruh penjuru dunia dengan koordinat peta interaktif." />
+    <title>Dicoding Story App</title>
+  </head>
+  <body>
+    <!-- Skip to Content Link for accessibility -->
+    <a href="#main-content" class="skip-link">Lewati ke Konten Utama</a>
+
+    <div id="app">
+      <!-- App Header / Navigation Bar (Will be toggled by router) -->
+      <header class="app-header" style="display: none;">
+        <div class="header-container">
+          <a href="#/home" class="logo-link" aria-label="Beranda Dicoding Story">
+            <div class="logo-icon" aria-hidden="true">D</div>
+            <span>Dicoding Story</span>
+          </a>
+          
+          <nav class="main-nav" aria-label="Navigasi Utama">
+            <!-- User Mini Profile -->
+            <div class="user-profile" aria-label="Profil Pengguna">
+              <div class="avatar-placeholder" aria-hidden="true">U</div>
+              <span class="user-name">Pengguna</span>
+            </div>
+
+            <!-- Add Story Navigation button -->
+            <a href="#/add-story" class="nav-btn nav-btn-secondary" aria-label="Tambah cerita baru">
+              <span>+ Buat Story</span>
+            </a>
+
+            <!-- Logout button -->
+            <button id="btn-logout" class="nav-btn nav-btn-secondary" aria-label="Keluar dari akun">
+              Keluar
+            </button>
+          </nav>
+        </div>
+      </header>
+
+      <!-- Main Application Space -->
+      <main id="main-content" tabindex="-1">
+        <!-- Render page contents here -->
+      </main>
+
+      <!-- Accessible Footer -->
+      <footer class="app-footer">
+        <p>&copy; 2026 Dicoding Story App. Dibuat dengan &hearts; untuk submission Belajar Pengembangan Web Intermediate.</p>
+      </footer>
+    </div>
+
+    <script type="module" src="/src/scripts/main.js"></script>
+  </body>
+</html>
