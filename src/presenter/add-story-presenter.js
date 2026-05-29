@@ -67,20 +67,19 @@ class AddStoryPresenter {
         lon: formData.lon,
       });
 
-      // Register Background Sync if supported
-      if ('serviceWorker' in navigator && 'SyncManager' in window) {
-        try {
-          const reg = await navigator.serviceWorker.ready;
-          await reg.sync.register('sync-new-stories');
-        } catch {
-          // Background sync not available — client-side sync will handle it
-        }
-      }
-
       Toast.warning(
         'Anda sedang offline. Cerita disimpan dan akan diunggah otomatis saat online kembali.'
       );
       this.router.navigateTo('#/home');
+
+      // Register Background Sync if supported (fire and forget to prevent hanging)
+      if ('serviceWorker' in navigator && 'SyncManager' in window) {
+        navigator.serviceWorker.ready.then((reg) => {
+          return reg.sync.register('sync-new-stories');
+        }).catch(() => {
+          // ignore error
+        });
+      }
     } catch {
       Toast.error('Gagal menyimpan cerita secara lokal.');
     } finally {

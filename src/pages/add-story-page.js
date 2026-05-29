@@ -24,18 +24,19 @@ class AddStoryPageView {
           <div style="display: flex; flex-direction: column; gap: 1.5rem;">
             
             <!-- File Drag & Drop Dropzone -->
-            <div class="form-group">
+            <div class="form-group" id="photo-group">
               <span class="form-label">Foto Cerita</span>
-              <div id="dropzone" class="upload-preview-container">
+              <div id="dropzone" class="upload-preview-container" tabindex="0" aria-label="Area unggah foto cerita">
                 <input 
                   type="file" 
                   id="photo-file" 
                   class="file-input" 
                   accept="image/*" 
                   aria-label="Pilih foto dari berkas"
+                  title="Pilih foto dari berkas"
                 />
                 <div id="upload-placeholder" style="display: flex; flex-direction: column; align-items: center; gap: 0.5rem;">
-                  <div class="upload-placeholder-icon">📸</div>
+                  <div class="upload-placeholder-icon" aria-hidden="true">📸</div>
                   <div class="upload-placeholder-text">
                     Klik atau Seret foto ke sini untuk mengunggah
                   </div>

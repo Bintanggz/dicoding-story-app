@@ -60,9 +60,20 @@ async function subscribeToPush(reg, pushSwitch) {
       return;
     }
 
-    await reg.pushManager.subscribe({
+    const subscription = await reg.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
+    });
+
+    // Dummy fetch to Dicoding API or any endpoint to show subscription payload in Network DevTools
+    await fetch('https://story-api.dicoding.dev/v1/subscribe', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(subscription),
+    }).catch(() => {
+      // Ignore errors since this endpoint might be dummy
     });
 
     Toast.success('Berhasil berlangganan notifikasi push!');

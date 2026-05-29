@@ -74,11 +74,12 @@ class MapHelper {
           // Create marker
           const marker = L.marker([latitude, longitude]);
           
-          // Setup popup content with clean layout
+          // Setup popup content with clean layout and photo
           const popupContent = `
-            <div>
-              <h3>${this._escapeHtml(name)}</h3>
-              <p>${this._escapeHtml(description)}</p>
+            <div style="width: 200px;">
+              <img src="${story.photoUrl}" alt="Foto dari ${this._escapeHtml(name)}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />
+              <h3 style="font-size: 1rem; margin: 0 0 4px 0;">${this._escapeHtml(name)}</h3>
+              <p style="font-size: 0.85rem; margin: 0; color: #666;">${this._escapeHtml(description)}</p>
             </div>
           `;
           marker.bindPopup(popupContent);
