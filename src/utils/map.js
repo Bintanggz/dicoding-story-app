@@ -77,7 +77,7 @@ class MapHelper {
           // Setup popup content with clean layout and photo
           const popupContent = `
             <div style="width: 200px;">
-              <img src="${story.photoUrl}" alt="Foto dari ${this._escapeHtml(name)}" style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 8px;" />
+              <img src="${story.photoUrl}" alt="Foto dari ${this._escapeHtml(name)}" style="width: 100%; height: 120px; object-fit: contain; background-color: var(--bg-primary, #0b0f19); border-radius: 4px; margin-bottom: 8px;" />
               <h3 style="font-size: 1rem; margin: 0 0 4px 0;">${this._escapeHtml(name)}</h3>
               <p style="font-size: 0.85rem; margin: 0; color: #666;">${this._escapeHtml(description)}</p>
             </div>
@@ -102,6 +102,10 @@ class MapHelper {
     if (markerGroup.length > 0) {
       this.map.fitBounds(L.latLngBounds(markerGroup), { padding: [40, 40] });
     }
+
+    setTimeout(() => {
+      if (this.map) this.map.invalidateSize();
+    }, 100);
   }
 
   initSelectionMap(elementId, initialLat = null, initialLon = null, onLocationSelect = null) {
@@ -152,6 +156,10 @@ class MapHelper {
         onLocationSelect({ lat: lat.toFixed(6), lon: lng.toFixed(6) });
       }
     });
+
+    setTimeout(() => {
+      if (this.map) this.map.invalidateSize();
+    }, 100);
   }
 
   focusMarker(id) {

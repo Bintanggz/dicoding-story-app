@@ -68,7 +68,7 @@ class AddStoryPresenter {
       });
 
       Toast.warning(
-        'Anda sedang offline. Cerita disimpan dan akan diunggah otomatis saat online kembali.'
+        'anda berada dalam keadaan offline, website kami akan melakukan sinkronisasi terhadap data yang anda input saat keadaan online'
       );
       this.router.navigateTo('#/home');
 

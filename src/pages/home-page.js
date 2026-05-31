@@ -25,6 +25,7 @@ class HomePageView {
             
             <div class="sidebar-controls">
               <div class="search-wrapper">
+                <label for="search-story" class="sr-only">Cari cerita</label>
                 <input 
                   type="search" 
                   id="search-story" 

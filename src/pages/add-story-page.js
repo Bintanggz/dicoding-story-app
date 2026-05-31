@@ -25,7 +25,7 @@ class AddStoryPageView {
             
             <!-- File Drag & Drop Dropzone -->
             <div class="form-group" id="photo-group">
-              <span class="form-label">Foto Cerita</span>
+              <label for="photo-file" class="form-label">Foto Cerita</label>
               <div id="dropzone" class="upload-preview-container" tabindex="0" aria-label="Area unggah foto cerita">
                 <input 
                   type="file" 
