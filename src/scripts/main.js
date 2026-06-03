@@ -38,7 +38,7 @@ const router = new Router(routes, 'main-content');
 // ── Push Notification Helpers ──────────────────────────────────────────────
 
 const VAPID_PUBLIC_KEY =
-  'BEl625uRD2ICgl71SGQAOCUNpWjhIPjo5gqa63KyRySyT33aNfDxjB_Jp5p2kGclXwd2oYt85C1b5F1965A20-0';
+  'BCCs2eonMI-6H2ctvFaWg-UYdDv387Vno_bzUzALpB442r2lCnsHmtrx8biyPi_E-1fSGABK_Qs_GlvPoJJqxbk';
 
 function urlB64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -65,16 +65,31 @@ async function subscribeToPush(reg, pushSwitch) {
       applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC_KEY),
     });
 
-    // Dummy fetch to Dicoding API or any endpoint to show subscription payload in Network DevTools
-    await fetch('https://story-api.dicoding.dev/v1/subscribe', {
+    const token = AuthRepository.getToken();
+    if (!token) {
+      throw new Error('Harap login terlebih dahulu untuk mengaktifkan notifikasi.');
+    }
+
+    const pushData = subscription.toJSON();
+
+    const response = await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       },
-      body: JSON.stringify(subscription),
-    }).catch(() => {
-      // Ignore errors since this endpoint might be dummy
+      body: JSON.stringify({
+        endpoint: pushData.endpoint,
+        keys: {
+          p256dh: pushData.keys.p256dh,
+          auth: pushData.keys.auth
+        }
+      }),
     });
+
+    if (!response.ok) {
+      throw new Error('Gagal menyimpan subscription di server');
+    }
 
     Toast.success('Berhasil berlangganan notifikasi push!');
     await reg.showNotification('Notifikasi Aktif! 🔔', {
@@ -99,7 +114,25 @@ async function subscribeToPush(reg, pushSwitch) {
 async function unsubscribeFromPush(reg, pushSwitch) {
   try {
     const subscription = await reg.pushManager.getSubscription();
-    if (subscription) await subscription.unsubscribe();
+    if (subscription) {
+      const pushData = subscription.toJSON();
+      const token = AuthRepository.getToken();
+      
+      if (token) {
+        await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            endpoint: pushData.endpoint
+          }),
+        });
+      }
+      
+      await subscription.unsubscribe();
+    }
     Toast.success('Berhasil berhenti berlangganan notifikasi.');
   } catch {
     Toast.error('Gagal menonaktifkan notifikasi.');

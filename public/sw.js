@@ -5,6 +5,7 @@ importScripts('https://cdn.jsdelivr.net/npm/idb@8/build/umd/index-min.js');
 
 if (workbox) {
   workbox.setConfig({ debug: false });
+  workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
 
   // ── App Shell: CSS, JS, HTML, fonts, local images ──────────────────────
   workbox.routing.registerRoute(
