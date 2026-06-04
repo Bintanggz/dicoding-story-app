@@ -1,4 +1,4 @@
 Nama: Hafizh Izdihar Bintang Santoso
 
 Deployment URL:
-https://dicoding-storyy.netlify.app/
+https://dicoding-storyy.netlify.app

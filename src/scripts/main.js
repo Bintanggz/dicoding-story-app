@@ -6,6 +6,7 @@ import Router from '../routes/router';
 
 // Import Auth Repository & Toast
 import AuthRepository from '../data/auth-repository';
+import ApiService from '../data/api-service';
 import Toast from '../utils/toast';
 
 // Import Offline Sync Helper
@@ -70,26 +71,7 @@ async function subscribeToPush(reg, pushSwitch) {
       throw new Error('Harap login terlebih dahulu untuk mengaktifkan notifikasi.');
     }
 
-    const pushData = subscription.toJSON();
-
-    const response = await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        endpoint: pushData.endpoint,
-        keys: {
-          p256dh: pushData.keys.p256dh,
-          auth: pushData.keys.auth
-        }
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error('Gagal menyimpan subscription di server');
-    }
+    await ApiService.subscribePush(token, subscription);
 
     Toast.success('Berhasil berlangganan notifikasi push!');
     await reg.showNotification('Notifikasi Aktif! 🔔', {
@@ -115,20 +97,9 @@ async function unsubscribeFromPush(reg, pushSwitch) {
   try {
     const subscription = await reg.pushManager.getSubscription();
     if (subscription) {
-      const pushData = subscription.toJSON();
       const token = AuthRepository.getToken();
-      
       if (token) {
-        await fetch('https://story-api.dicoding.dev/v1/notifications/subscribe', {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            endpoint: pushData.endpoint
-          }),
-        });
+        await ApiService.unsubscribePush(token, subscription);
       }
       
       await subscription.unsubscribe();

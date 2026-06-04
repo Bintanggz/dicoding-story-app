@@ -71,6 +71,37 @@ class ApiService {
       body: formData,
     });
   }
+  static async subscribePush(token, pushSubscription) {
+    const pushData = pushSubscription.toJSON();
+    return this._fetchJson(`${this.BASE_URL}/notifications/subscribe`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        endpoint: pushData.endpoint,
+        keys: {
+          p256dh: pushData.keys.p256dh,
+          auth: pushData.keys.auth,
+        },
+      }),
+    });
+  }
+
+  static async unsubscribePush(token, pushSubscription) {
+    const pushData = pushSubscription.toJSON();
+    return this._fetchJson(`${this.BASE_URL}/notifications/subscribe`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        endpoint: pushData.endpoint,
+      }),
+    });
+  }
 }
 
 export default ApiService;

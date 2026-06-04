@@ -123,7 +123,13 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     (async () => {
       let title = 'Story Baru! 📸';
-      let body = 'Ada cerita menarik baru dari pengguna lain!';
+      let options = {
+        body: 'Ada cerita menarik baru dari pengguna lain!',
+        icon: '/icon-192.png',
+        badge: '/icon-192.png',
+        vibrate: [100, 50, 100],
+        data: { url: '/' },
+      };
 
       try {
         const response = await fetch('https://story-api.dicoding.dev/v1/stories?page=1&size=1');
@@ -132,7 +138,7 @@ self.addEventListener('push', (event) => {
         
         if (story) {
           title = `Cerita Baru dari ${story.name}`;
-          body = story.description.slice(0, 50) + '...';
+          options.body = story.description.slice(0, 50) + '...';
         }
       } catch (err) {
         // Fallback if fetch fails
@@ -142,19 +148,15 @@ self.addEventListener('push', (event) => {
         try {
           const pushData = event.data.json();
           title = pushData.title || title;
-          body = pushData.body || body;
+          if (pushData.options) {
+            options = { ...options, ...pushData.options };
+          }
         } catch {
-          body = event.data.text() || body;
+          options.body = event.data.text() || options.body;
         }
       }
 
-      await self.registration.showNotification(title, {
-        body: body,
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
-        vibrate: [100, 50, 100],
-        data: { url: '/' },
-      });
+      await self.registration.showNotification(title, options);
     })()
   );
 });
